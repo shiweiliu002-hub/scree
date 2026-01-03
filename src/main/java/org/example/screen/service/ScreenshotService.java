@@ -16,16 +16,23 @@ public class ScreenshotService {
     public byte[] captureScreenshot(String url) throws Exception {
         WebDriver driver = null;
         try {
-            // Setup ChromeDriver
-            WebDriverManager.chromedriver().setup();
-
             // Configure Chrome options
             ChromeOptions options = new ChromeOptions();
-            options.addArguments("--headless"); // Run in headless mode
+
+            // Use system Chrome binary
+            options.setBinary("/usr/bin/google-chrome");
+
+            // Add headless and other necessary arguments
+            options.addArguments("--headless=new"); // New headless mode
             options.addArguments("--no-sandbox");
             options.addArguments("--disable-dev-shm-usage");
             options.addArguments("--disable-gpu");
             options.addArguments("--window-size=1920,1080");
+            options.addArguments("--disable-extensions");
+            options.addArguments("--disable-software-rasterizer");
+
+            // Set ChromeDriver path to system installation
+            System.setProperty("webdriver.chrome.driver", "/usr/local/bin/chromedriver");
 
             // Initialize WebDriver
             driver = new ChromeDriver(options);
