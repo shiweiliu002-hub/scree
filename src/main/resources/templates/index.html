@@ -235,8 +235,8 @@
     </div>
 
     <script>
-        // API基础URL - 自动检测当前协议和主机，但强制使用8080端口
-        const API_BASE_URL = `${window.location.protocol}//${window.location.hostname}:8080`;
+        // API基础URL - 使用当前源的完整URL（自动适应开发和生产环境）
+        const API_BASE_URL = window.location.origin;
 
         let currentUrl = '';
 
@@ -283,7 +283,7 @@
                     showError(data.message);
                 }
             } catch (error) {
-                showError('截图失败，请确保后端服务已在8080端口启动');
+                showError('截图失败，请确保后端服务已正常启动');
                 console.error('Error:', error);
             } finally {
                 loading.classList.remove('show');
