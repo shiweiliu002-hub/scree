@@ -26,7 +26,9 @@ RUN apk add --no-cache \
     fontconfig \
     libgcc \
     libstdc++ \
-    tzdata
+    tzdata \
+    noto-fonts-cjk \
+    noto-fonts-cjk-extra
 
 # Create symlink for chromedriver
 RUN ln -s /usr/bin/chromedriver /usr/local/bin/chromedriver
