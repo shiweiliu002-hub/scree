@@ -1,0 +1,21 @@
+# Git
+.git
+.gitignore
+
+# Maven
+target/
+!target/*.jar
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.DS_Store
+
+# Build logs
+*.log
+
+# Other
+HELP.md
+mvnw
+mvnw.cmd

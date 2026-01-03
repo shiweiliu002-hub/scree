@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  screen-app:
+    build: .
+    container_name: screen-app
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+    restart: unless-stopped
