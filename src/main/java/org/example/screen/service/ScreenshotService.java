@@ -19,9 +19,6 @@ public class ScreenshotService {
             // Configure Chrome options
             ChromeOptions options = new ChromeOptions();
 
-            // Use system Chrome binary
-            options.setBinary("/usr/bin/google-chrome");
-
             // Add headless and other necessary arguments
             options.addArguments("--headless=new"); // New headless mode
             options.addArguments("--no-sandbox");
@@ -31,8 +28,35 @@ public class ScreenshotService {
             options.addArguments("--disable-extensions");
             options.addArguments("--disable-software-rasterizer");
 
-            // Set ChromeDriver path to system installation
-            System.setProperty("webdriver.chrome.driver", "/usr/local/bin/chromedriver");
+            // Check if running in Docker environment (Linux with system Chrome)
+            String osName = System.getProperty("os.name").toLowerCase();
+            if (osName.contains("linux")) {
+                // Try multiple possible Chrome/Chromium paths
+                String[] chromePaths = {
+                    System.getenv().getOrDefault("CHROME_BIN", ""),
+                    "/usr/bin/chromium-browser",  // Alpine
+                    "/usr/bin/google-chrome",      // Debian/Ubuntu
+                    "/usr/bin/chromium"            // Fallback
+                };
+
+                boolean foundChrome = false;
+                for (String path : chromePaths) {
+                    if (!path.isEmpty() && new java.io.File(path).exists()) {
+                        options.setBinary(path);
+                        System.setProperty("webdriver.chrome.driver", "/usr/local/bin/chromedriver");
+                        foundChrome = true;
+                        break;
+                    }
+                }
+
+                // Fallback to WebDriverManager if no system Chrome found
+                if (!foundChrome) {
+                    WebDriverManager.chromedriver().setup();
+                }
+            } else {
+                // Local development (Windows/Mac) - use WebDriverManager
+                WebDriverManager.chromedriver().setup();
+            }
 
             // Initialize WebDriver
             driver = new ChromeDriver(options);
